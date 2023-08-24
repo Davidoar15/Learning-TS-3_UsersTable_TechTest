@@ -4,6 +4,7 @@ import UsersList from './components/UsersList';
 
 function App() {
   const [users, setUsers] = useState([]);
+  const [showColors, setShowColors] = useState(false);
 
   useEffect(() => {
     fetch('https://randomuser.me/api?results=100')
@@ -14,12 +15,23 @@ function App() {
       .catch((error) => {
         console.log(error);
       });
-  }, [])
+  }, []);
+
+  const toggleColors = () => {
+    setShowColors(!showColors);
+  };
 
   return (
     <div className='App'>
       <h4>Tech Test</h4>
-      <UsersList users={users}/>
+      <header>
+        <button onClick={toggleColors}>
+          Color Rows
+        </button>
+      </header>
+      <main>
+        <UsersList users={users} showColors={showColors}/>
+      </main>
     </div>
   )
 }
