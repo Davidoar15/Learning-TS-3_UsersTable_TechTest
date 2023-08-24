@@ -40,6 +40,11 @@ function App() {
     }) 
     : users;*/
 
+  const handleDelete = (uuid: string) => {
+    const filteredUsers = users.filter((user) => user.login.uuid !== uuid);
+    setUsers(filteredUsers);
+  }
+
   return (
     <div className='App'>
       <h4>Tech Test</h4>
@@ -53,7 +58,7 @@ function App() {
         </button>
       </header>
       <main>
-        <UsersList users={sortedUsers} showColors={showColors}/>
+        <UsersList users={sortedUsers} showColors={showColors} handleDelete={handleDelete}/>
       </main>
     </div>
   )

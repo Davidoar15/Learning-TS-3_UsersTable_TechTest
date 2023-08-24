@@ -2,10 +2,11 @@ import { type User } from "../types";
 
 interface Props {
     users: User[],
-    showColors: boolean
+    showColors: boolean,
+    handleDelete: (uuid: string) => void
 }
 
-export default function UsersList({ users, showColors }: Props) {
+export default function UsersList({ users, showColors, handleDelete }: Props) {
 
     return (
         <table width='100%'>
@@ -26,7 +27,7 @@ export default function UsersList({ users, showColors }: Props) {
                         const color = showColors ? bgColor : 'transparent'
 
                         return (
-                            <tr key={index} style={{ backgroundColor: color }}>
+                            <tr key={user.login.uuid} style={{ backgroundColor: color }}>
                                 <td>
                                     <img src={user.picture.thumbnail} alt={user.name.first}/>
                                 </td>
@@ -40,7 +41,7 @@ export default function UsersList({ users, showColors }: Props) {
                                     {user.location.country}
                                 </td>
                                 <td>
-                                    <button>Delete</button>
+                                    <button onClick={() => {handleDelete(user.login.uuid)}}>Delete</button>
                                 </td>
                             </tr>
                         )
