@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import './App.css'
 import UsersList from './components/UsersList';
 import { User } from './types';
@@ -7,12 +7,14 @@ function App() {
   const [users, setUsers] = useState<User[]>([]);
   const [showColors, setShowColors] = useState(false);
   const [sortByCountry, setSortByCountry] = useState(false);
+  const originalUsers = useRef<User[]>([]); //? Save a value that we want share between renders, but when change not return to render the component
 
   useEffect(() => {
     fetch('https://randomuser.me/api?results=100')
       .then(res => res.json())
       .then(res => {
         setUsers(res.results)
+        originalUsers.current = res.results
       })
       .catch((error) => {
         console.log(error);
@@ -45,6 +47,10 @@ function App() {
     setUsers(filteredUsers);
   }
 
+  const handleReset = () => {
+    setUsers(originalUsers.current)
+  }
+
   return (
     <div className='App'>
       <h4>Tech Test</h4>
@@ -55,6 +61,10 @@ function App() {
 
         <button onClick={toggleSortByCountry}>
           {sortByCountry ? 'Not Sort by Country' : 'Sort by Country'}
+        </button>
+
+        <button onClick={handleReset}>
+          Reset List
         </button>
       </header>
       <main>
