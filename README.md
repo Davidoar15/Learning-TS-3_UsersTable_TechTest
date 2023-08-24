@@ -4,7 +4,7 @@ The Objective of this technical test is create a Table of Users with their infor
 
 Here are the Steps to follow:
 
-- [] Fetch 100 rows of data using the API.
+- [x] Fetch 100 rows of data using the API.
 - [] Display the data in a table format.
 - [] Provide the option to color rows.
 - [] Allow the data to be sorted by country.
