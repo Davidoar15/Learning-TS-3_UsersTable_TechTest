@@ -1,12 +1,12 @@
 import { useEffect, useState, useRef, useMemo } from 'react'
 import './App.css'
 import UsersList from './components/UsersList';
-import { User } from './types';
+import { SortBy, User } from './types.d';
 
 function App() {
   const [users, setUsers] = useState<User[]>([]);
   const [showColors, setShowColors] = useState(false);
-  const [sortByCountry, setSortByCountry] = useState(false);
+  const [sorting, setSorting] = useState<SortBy>(SortBy.NONE);
   const originalUsers = useRef<User[]>([]); //? Save a value that we want share between renders, but when change not return to render the component
   const [filterCountry, setFilterCountry] = useState<string | null>(null);
 
@@ -27,7 +27,8 @@ function App() {
   };
 
   const toggleSortByCountry = () => { 
-    setSortByCountry((prevState) => !prevState) 
+    const newSortingValue = sorting === SortBy.NONE ? SortBy.COUNTRY : SortBy.NONE;
+    setSorting(newSortingValue);
   };
 
   const filteredUsers = useMemo(() => {
@@ -39,12 +40,20 @@ function App() {
   }, [users, filterCountry]);
 
   const sortedUsers = useMemo(() => {
-    return sortByCountry 
-      ? filteredUsers.toSorted(
-        (a, b) => a.location.country.localeCompare(b.location.country)
-      )
-      : filteredUsers
-  }, [filteredUsers, sortByCountry]);
+    if (sorting === SortBy.NONE) return filteredUsers;
+
+    let sortedFn = (a: User, b: User) => a.location.country.localeCompare(b.location.country)
+
+    if (sorting === SortBy.NAME) {
+      sortedFn = (a, b) => a.name.first.localeCompare(b.name.first);
+    };
+
+    if (sorting === SortBy.LAST) {
+      sortedFn = (a, b) => a.name.last.localeCompare(b.name.last);
+    };
+
+    return filteredUsers.toSorted(sortedFn);
+  }, [filteredUsers, sorting]);
 
   // * One solution to sort users and back to original array
   /*const sortedUsers = sortByCountry 
@@ -62,6 +71,10 @@ function App() {
     setUsers(originalUsers.current)
   };
 
+  const handleChangeSort = (sort: SortBy) => {
+    setSorting(sort);
+  }
+
   return (
     <div className='App'>
       <h4>Tech Test</h4>
@@ -71,7 +84,7 @@ function App() {
         </button>
 
         <button onClick={toggleSortByCountry}>
-          {sortByCountry ? 'Not Sort by Country' : 'Sort by Country'}
+          {sorting === SortBy.COUNTRY ? 'Not Sort by Country' : 'Sort by Country'}
         </button>
 
         <button onClick={handleReset}>
@@ -83,7 +96,7 @@ function App() {
         }}/>
       </header>
       <main>
-        <UsersList users={sortedUsers} showColors={showColors} handleDelete={handleDelete}/>
+        <UsersList users={sortedUsers} showColors={showColors} handleDelete={handleDelete} changeSorting={handleChangeSort}/>
       </main>
     </div>
   )

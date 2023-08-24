@@ -10,8 +10,6 @@ Here are the Steps to follow:
 - [x] Allow the data to be sorted by country.
 - [x] Enable the ability to delete a row.
 - [x] Implement a feature that allows the user to restore the initial state, meaning that all deleted rows will be recovered.
-- [] Handle any potential errors that may occur. 
 - [x] Implement a feature that allows the user to filter the data by country.
 - [x] Avoid sorting users again the data when the user is changing filter by country.
-- [] Sort by clicking on the column header.
-- [] Provide a README.md file with instruccions on how to run the app.
+- [x] Sort by clicking on the column header.
